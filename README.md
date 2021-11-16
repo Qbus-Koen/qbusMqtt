@@ -6,21 +6,22 @@ With this application you can communicate with all Qbus CTD controller over an M
 ## How to use
 The software requires a tftp client and a MQTT server.
 On Linux (raspberry) you can install a tftp client with:
-sudo apt-get install -y tftp
+`sudo apt-get install -y tftp`
 
 And if you don't have a MQTT server, we recommand using Mosquitto:
-sudo apt-get install -y mosquitto
+`sudo apt-get install -y mosquitto`
 
 ### Setting up Mosquitto
 For security reasons, we recommend setting up a user with password on the Mosquitto server. You can create a login with the following command:
 
-sudo mosquitto_passwd -c /etc/mosquitto/pass <username>
+`sudo mosquitto_passwd -c /etc/mosquitto/pass <username>`
 
 Then enter and reenter a password.
 
 Next you have to edit the moquitto configuration file to use this passord.
 The conf file is located at /etc/mosquitto/mosquitto.conf
   
+```
 # Place your local configuration in /etc/mosquitto/conf.d/
 #
 # A full description of the configuration file is at
@@ -38,20 +39,28 @@ include_dir /etc/mosquitto/conf.d
 per_listener_settings true
 allow_anonymous false
 password_file /etc/mosquitto/pass
+```
   
 Then restart mosquitto to apply the changes:
-sudo systemctl restart mosquitto
+
+`sudo systemctl restart mosquitto`
 
 ### Setting up Qbus MQTT client
 First we need to unzip the tar file. Create a new directory to store the files:
-sudo mkdir /usr/bin/qbus
+
+`sudo mkdir /usr/bin/qbus`
+
 And unzip the tar file to that location:
-sudo tar -xf ubielite.tar.gz -C /usr/bin/qbus
+
+`sudo tar -xf ubielite.tar.gz -C /usr/bin/qbus`
   
 To use the client, we recomment to use a service.
-Create a new file: 
-/lib/systemd/system/qbusmqtt.service
+Create a new file:
+
+`/lib/systemd/system/qbusmqtt.service`
+
 And enter the following:
+```
 [Unit]
 Description=Client for Qbus communication
 After=multi-user.target qbusserver.service
@@ -64,13 +73,17 @@ WorkingDirectory=/usr/bin/qbus/qbusMqtt
 
 [Install]
 WantedBy=multi-user.target
-  
+```
+
 Then reload the servies:
-sudo systemctl daemon-reload
+
+`sudo systemctl daemon-reload`
 
 Enable the qbusmqtt service:
-sudo systemctl enable qbusmqtt.service
+
+`sudo systemctl enable qbusmqtt.service`
   
 Finally start the service:
-sudo systemctl start qbusmqtt.service
+
+`sudo systemctl start qbusmqtt.service`
 

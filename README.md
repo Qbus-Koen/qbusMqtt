@@ -132,4 +132,12 @@ sudo openhab-cli clean-cache
 sudo systemctl start openhab.service 
 ```
   
+The new Qbus Bridge depens on the MQTT Binding, so first install the MQTT Binding before you can use the Qbus Binding.
   
+The only thing you've got to chage if you used the previous version is the Bridge:
+  
+```
+Bridge qbus:bridge2:CTD007841 [ ip="localhost", sn="<ctd/sn>", login="<mqttuser>", passwd="<mqttpassw>", port=1883] {
+}  
+```
+ 

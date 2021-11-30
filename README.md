@@ -117,3 +117,23 @@ Finally start the service:
 
 `sudo systemctl start qbusmqtt.service`
 
+## openHAB
+A new JAR to communicate with MQTT is included in this repository.
+To use it, firs disable the current Binding in openHAB if you enabled it from the Binding included in the openHAB Bindings.
+Then copy the JAR to openHAB:
+
+```
+sudo rm /usr/share/openhab/addons/org.openhab.binding.qbus* 
+sudo cp qbusMtt/openHAB/org.openhab.binding.qbus-3.2.0-SNAPSHOT.jar /usr/share/openhab/addons/ 
+sudo chown openhab:openhab  /usr/share/openhab/addons/org.openhab.binding.qbus-3.2.0-SNAPSHOT.jar
+```
+  
+Then clean the cache and restart openHAB:
+  
+```
+sudo systemctl stop openhab.service
+sudo openhab-cli clean-cache
+sudo systemctl start openhab.service 
+```
+  
+  

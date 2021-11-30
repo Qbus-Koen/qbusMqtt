@@ -87,7 +87,7 @@ RestartSec=5s
 WantedBy=multi-user.target
 ```
 
-Replace <user> and <password> by you mosquitto credentials.
+Replace \<user\> and \<password\> by you mosquitto credentials.
 
 Then we create a logrotation for the service:
   

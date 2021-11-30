@@ -1,6 +1,6 @@
-# qbusMqtt
+# qbusMqttGw
 
-This is the repository for the Qbus Mqtt client application.
+This is the repository for the Qbus Mqtt Gateway application.
 With this application you can communicate with all Qbus CTD controller over an MQTT server.
 
 ## How to use
@@ -50,7 +50,7 @@ First we need to unzip the tar files:
 
 `tar -xf qbusMqttGw-arm.tar`
 
-Then we create te locations needed for the software:
+Then we create the locations needed for the software:
 ```
 sudo mkdir /usr/bin/qbus
 sudo mkdir /opt/qbus

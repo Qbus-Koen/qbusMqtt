@@ -46,13 +46,28 @@ Then restart mosquitto to apply the changes:
 `sudo systemctl restart mosquitto`
 
 ### Setting up Qbus MQTT client
-First we need to unzip the tar file. Create a new directory to store the files:
+First we need to unzip the tar files:
 
-`sudo mkdir /usr/bin/qbus`
+`tar -xf qbusMqttGw-arm.tar`
 
-And unzip the tar file to that location:
+Then we create te locations needed for the software:
+```
+sudo mkdir /usr/bin/qbus
+sudo mkdir /opt/qbus
+sudo mkdir /var/log/qbus
+```
 
-`sudo tar -xf ubielite.tar.gz -C /usr/bin/qbus`
+Next, unzip the tar file to that location:
+
+`sudo tar -xf qbusMqttGw-arm.tar`
+
+And copy the files to the correct locations:
+
+```
+sudo cp -R qbusMqttGw-arm/fw/ /opt/qbus/
+sudo cp qbusMqttGw-arm/puttftp /opt/qbus/
+sudo cp qbusMqttGw-arm/qbusMqttGw /usr/bin/qbus/
+```
   
 To use the client, we recomment to use a service.
 Create a new file:
@@ -62,19 +77,34 @@ Create a new file:
 And enter the following:
 ```
 [Unit]
-Description=Client for Qbus communication
-After=multi-user.target qbusserver.service
+Description=MQTT client for Qbus communication
+After=multi-user.target networking.service
 
 [Service]
-Type=simple
-ExecStart= /usr/bin/qbus/qbusMqtt/./UbieLite -logtostderr -mqttbroker "tcp://localhost:1883" -mqttuser <user> -mqttpassword <pass>
-Restart=always
-WorkingDirectory=/usr/bin/qbus/qbusMqtt
+ExecStart= /usr/bin/qbus/qbusMqtt/./qbusMqttGw -serial="QBUSMQTTGW" -logbuflevel -1 -log_dir /var/log/qbus -max_log_size=10 -storagedir /opt/qbus -mqttbroker "tcp://localhost:1883" -mqttuser <user> -mqttpassword <password>
+PIDFile=/var/run/qbusmqttgw.pid
+Restart=on-failure
+RemainAfterExit=no
+RestartSec=5s
 
 [Install]
 WantedBy=multi-user.target
 ```
 
+Replace <user> and <password> by you mosquitto credentials.
+
+Then we create a logrotation for the service:
+  
+```
+sudo touch /etc/logrotate.d/qbus
+echo '/var/log/qbus/*.log {' | sudo tee -a /etc/logrotate.d/qbus
+echo '        daily' | sudo tee -a /etc/logrotate.d/qbus
+echo '        rotate 7' | sudo tee -a /etc/logrotate.d/qbus
+echo '        size 10M' | sudo tee -a /etc/logrotate.d/qbus
+echo '        compress' | sudo tee -a /etc/logrotate.d/qbus
+echo '        delaycompress' | sudo tee -a /etc/logrotate.d/qbus
+```
+  
 Then reload the servies:
 
 `sudo systemctl daemon-reload`

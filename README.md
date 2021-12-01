@@ -46,7 +46,7 @@ Then restart mosquitto to apply the changes:
 `sudo systemctl restart mosquitto`
 
 ### Setting up Qbus MQTT client
-First we need to unzip the tar files:
+First we need to unzip the tar files (this example uses the arm version, if you are installing on a Linux machine, use the correct version):
 
 `tar -xf qbusMqtt/qbusMqtt/qbusMqttGw-arm.tar`
 
@@ -60,9 +60,9 @@ sudo mkdir /var/log/qbus
 And copy the files to the correct locations:
 
 ```
-sudo cp -R qbusMqtt/qbusMqtt/qbusMqttGw-arm/fw/ /opt/qbus/
-sudo cp qbusMqtt/qbusMqtt/qbusMqttGw-arm/puttftp /opt/qbus/
-sudo cp qbusMqtt/qbusMqtt/qbusMqttGw-arm/qbusMqttGw /usr/bin/qbus/
+sudo cp -R qbusMqttGw-arm/fw/ /opt/qbus/
+sudo cp qbusMqttGw-arm/puttftp /opt/qbus/
+sudo cp qbusMqttGw-arm/qbusMqttGw /usr/bin/qbus/
 ```
   
 To use the client, we recomment to use a service.

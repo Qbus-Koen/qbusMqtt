@@ -77,7 +77,7 @@ Description=MQTT client for Qbus communication
 After=multi-user.target networking.service
 
 [Service]
-ExecStart= /usr/bin/qbus/qbusMqtt/./qbusMqttGw -serial="QBUSMQTTGW" -logbuflevel -1 -log_dir /var/log/qbus -max_log_size=10 -storagedir /opt/qbus -mqttbroker "tcp://localhost:1883" -mqttuser <user> -mqttpassword <password>
+ExecStart= /usr/bin/qbus/./qbusMqttGw -serial="QBUSMQTTGW" -logbuflevel -1 -log_dir /var/log/qbus -max_log_size=10 -storagedir /opt/qbus -mqttbroker "tcp://localhost:1883" -mqttuser <user> -mqttpassword <password>
 PIDFile=/var/run/qbusmqttgw.pid
 Restart=on-failure
 RemainAfterExit=no

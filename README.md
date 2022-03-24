@@ -48,7 +48,7 @@ Then restart mosquitto to apply the changes:
 ### Setting up Qbus MQTT client
 First we need to unzip the tar files (this example uses the arm version, if you are installing on a Linux machine, use the correct version):
 
-`tar -xf qbusMqtt/qbusMqtt/qbusMqttGw-arm.tar`
+`tar -xf qbusMqtt/qbusMqttGw/qbusMqttGw-arm.tar`
 
 Then we create the locations needed for the software:
 ```
@@ -64,7 +64,12 @@ sudo cp -R qbusMqttGw-arm/fw/ /opt/qbus/
 sudo cp qbusMqttGw-arm/puttftp /opt/qbus/
 sudo cp qbusMqttGw-arm/qbusMqttGw /usr/bin/qbus/
 ```
-  
+Make files executable:
+```
+sudo chmod +x /usr/bin/qbus/qbusMqttGw
+sudo chmod +x /opt/qbus/puttftp
+```
+
 To use the client, we recomment to use a service.
 Create a new file:
 
@@ -77,7 +82,7 @@ Description=MQTT client for Qbus communication
 After=multi-user.target networking.service
 
 [Service]
-ExecStart= /usr/bin/qbus/qbusMqtt/./qbusMqttGw -serial="QBUSMQTTGW" -logbuflevel -1 -log_dir /var/log/qbus -max_log_size=10 -storagedir /opt/qbus -mqttbroker "tcp://localhost:1883" -mqttuser <user> -mqttpassword <password>
+ExecStart= /usr/bin/qbus/./qbusMqttGw -serial="QBUSMQTTGW" -logbuflevel -1 -log_dir /var/log/qbus -max_log_size=10 -storagedir /opt/qbus -mqttbroker "tcp://localhost:1883" -mqttuser <user> -mqttpassword <password>
 PIDFile=/var/run/qbusmqttgw.pid
 Restart=on-failure
 RemainAfterExit=no
@@ -87,21 +92,11 @@ RestartSec=5s
 WantedBy=multi-user.target
 ```
 
+If your Mqtt broker is on another device, change "tcp://localhost:1883".  
 Replace \<user\> and \<password\> by you mosquitto credentials.
 
-Then we create a logrotation for the service:
-  
-```
-sudo touch /etc/logrotate.d/qbus
-echo '/var/log/qbus/*.log {' | sudo tee -a /etc/logrotate.d/qbus
-echo '        daily' | sudo tee -a /etc/logrotate.d/qbus
-echo '        rotate 7' | sudo tee -a /etc/logrotate.d/qbus
-echo '        size 10M' | sudo tee -a /etc/logrotate.d/qbus
-echo '        compress' | sudo tee -a /etc/logrotate.d/qbus
-echo '        delaycompress' | sudo tee -a /etc/logrotate.d/qbus
-```
-  
-Then reload the servies:
+
+Now it's time to reload the servies:
 
 `sudo systemctl daemon-reload`
 
@@ -137,7 +132,7 @@ The new Qbus Bridge depens on the MQTT Binding, so first install the MQTT Bindin
 The only thing you've got to chage if you used the previous version is the Bridge:
   
 ```
-Bridge qbus:bridge2:CTD007841 [ ip="localhost", sn="<ctd/sn>", login="<mqttuser>", passwd="<mqttpassw>", port=1883] {
+Bridge qbus:bridge2:CTDxxxxxx [ ip="<ip mosquitto>", sn="<ctd/sn>", login="<mqttuser>", passwd="<mqttpassw>", port=<mqtt port>] {
 }  
 ```
  

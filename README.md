@@ -46,23 +46,22 @@ Then restart mosquitto to apply the changes:
 `sudo systemctl restart mosquitto`
 
 ### Setting up Qbus MQTT client
-First we need to unzip the tar files (this example uses the arm version, if you are installing on a Linux machine, use the correct version):
+First we need to unzip the tar files (this example uses the arm version, if you are installing on a Linux machine, use the correct version - x86 / x64):
 
-`tar -xf qbusMqtt/qbusMqttGw/qbusMqttGw-arm.tar`
+`tar -xf qbusMqtt/qbusMqtt/qbusMqttGw/qbusMqttGw-arm.tar`
 
 Then we create the locations needed for the software:
 ```
 sudo mkdir /usr/bin/qbus
 sudo mkdir /opt/qbus
-sudo mkdir /var/log/qbus
 ```
 
 And copy the files to the correct locations:
 
 ```
-sudo cp -R qbusMqttGw-arm/fw/ /opt/qbus/
-sudo cp qbusMqttGw-arm/puttftp /opt/qbus/
-sudo cp qbusMqttGw-arm/qbusMqttGw /usr/bin/qbus/
+sudo cp -R qbusMqtt/qbusMqtt/qbusMqttGw/qbusMqttGw-arm/fw/ /opt/qbus/
+sudo cp qbusMqtt/qbusMqtt/qbusMqttGw/qbusMqttGw-arm/puttftp /opt/qbus/
+sudo cp qbusMqtt/qbusMqtt/qbusMqttGw/qbusMqttGw-arm/qbusMqttGw /usr/bin/qbus/
 ```
 Make files executable:
 ```
@@ -82,7 +81,7 @@ Description=MQTT client for Qbus communication
 After=multi-user.target networking.service
 
 [Service]
-ExecStart= /usr/bin/qbus/./qbusMqttGw -serial="QBUSMQTTGW" -logbuflevel -1 -log_dir /var/log/qbus -max_log_size=10 -storagedir /opt/qbus -mqttbroker "tcp://localhost:1883" -mqttuser <user> -mqttpassword <password>
+ExecStart= /usr/bin/qbus/./qbusMqttGw -serial="QBUSMQTTGW" -daemon true -logbuflevel -1 -logtostderr true -storagedir /opt/qbus -mqttbroker "tcp://localhost:1883" -mqttuser <user> -mqttpassword <password>
 PIDFile=/var/run/qbusmqttgw.pid
 Restart=on-failure
 RemainAfterExit=no

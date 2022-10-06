@@ -131,7 +131,7 @@ The new Qbus Bridge depens on the MQTT Binding, so first install the MQTT Bindin
 The only thing you've got to chage if you used the previous version is the Bridge:
   
 ```
-Bridge qbus:bridge2:CTDxxxxxx [ ip="<ip mosquitto>", sn="<ctd/sn>", login="<mqttuser>", passwd="<mqttpassw>", port=<mqtt port>] {
+Bridge qbus:bridge:CTDxxxxxx [ ip="<ip mosquitto>", sn="<ctd/sn>", login="<mqttuser>", passwd="<mqttpassw>", port=<mqtt port>] {
 }  
 ```
  

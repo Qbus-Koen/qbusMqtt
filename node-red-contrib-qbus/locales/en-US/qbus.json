@@ -1,0 +1,20 @@
+{
+    "qbus": {
+        "label": {
+            "name": "Name",
+            "mqtt": "MQTT Server",
+            "ctd": "CTD Serial"
+        },
+        "placeholder": {
+			"name": "Name"
+        },
+        "tip": {
+            "deploy": "<b>Important:</b> deploy server node to get controller list"
+        },
+        "errors": {
+            "missing-config": "Missing broker configuration",
+            "invalid-value-type": "Invalid value type",
+            "invalid-topic": "Invalid topic specified"
+        }
+    }
+}

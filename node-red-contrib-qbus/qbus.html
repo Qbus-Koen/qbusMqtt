@@ -1,0 +1,87 @@
+<script type="text/javascript">
+    RED.nodes.registerType('qbus-client',{
+        category: 'config',
+        defaults: {
+            server: {
+               type: "qbus-server",
+                required: true
+            },
+            ctdSn: {
+                value: null,
+                required: true
+            },
+            selCtd: {value:""},
+            ctdQid: {value:""},
+        },
+        color:"#4286f4",
+        icon: "bridge.svg",
+        paletteLabel: 'client',
+        oneditprepare: function() {
+            // Set current controller
+            $('#node-config-input-name').val(this.ctdSn);
+
+            // Clear dropdown
+            $('#node-input-selCtd').empty();
+
+            // Request all controllers
+            $.getJSON("qbus-client/ctds", function(ctd) {
+                // Add ctds to dropdown
+                for (i = 0; i < ctd.length; i++) {
+                    $('#node-input-selCtd')
+                        .append($('<option>', { value : ctd[i].id })
+                        .text(ctd[i].sn)) 
+                }
+                // Set previuous selected ctd to dropdown
+                var cc = $("#node-config-input-ctdQid").val().toString();
+                $('#node-input-selCtd').val(cc);
+            }).fail(function(jqXHR, textStatus, errorThrown) { console.log('Failed to get Controllers list, please connect to MQTT server first.'); }) 
+
+            // Set variables for selected CTD
+            $("#node-input-selCtd").on('change', function(event, type, value) {
+                    var ctdSn = $('#node-input-selCtd option:selected').text();
+                    $("#node-config-input-ctdSn").val(ctdSn);
+                    this.ctdSn = ctdSn;
+
+                    var ctdQid = $('#node-input-selCtd option:selected').val();
+                    $("#node-config-input-ctdQid").val(ctdQid);
+                    this.ctdQid = ctdQid;
+
+                    $("#node-config-input-name").val(this.ctdSn);
+            });
+        },
+        label: function() {
+            return this.ctdSn || null;
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="qbus-client">
+    <div class="form-row">
+        <label for="node-config-input-name" class="l-width"><i class="fa fa-bookmark"></i> <span data-i18n="qbus.label.name"></span></label>
+        <input type="text" id="node-config-input-name">
+    </div>
+
+    <div class="form-row">
+        <label for="node-config-input-server" class="l-width"><i class="fa fa-globe"></i> <span data-i18n="qbus.label.mqtt"></span></label>
+        <input type="text" id="node-config-input-server">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-selCtd"><i class="fa fa-tag"></i> <span data-i18n="qbus.label.ctd"></span></label>
+        <select id="node-input-selCtd">
+        </select>
+    </div>
+
+    <div class="form-tips" data-i18n="[html]qbus.tip.deploy"></div>
+
+    <div class="form-row" style="display: none;">
+        <input type="text" id="node-config-input-ctdSn">
+    </div>
+
+    <div class="form-row" style="display: none;">
+        <input type="text" id="node-config-input-ctdQid">
+    </div>
+
+    
+
+</script>

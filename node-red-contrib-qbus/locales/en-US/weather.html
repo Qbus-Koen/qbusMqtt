@@ -1,0 +1,50 @@
+<script type="text/x-red" data-help-name="qbus-weather">
+    <p>This node can receives messages of the weather station type.</p>
+
+    <h3>Configuration</h3>
+    <dl class="message-properties">
+        <dt class="optional">Name <span class="property-type">string</span></dt><dd>Choose any name to identify your node</dd>
+        <dt>Controller <span class="property-type">object</span></dt><dd>Choose the controller to use</dd>
+        <dt>Output <span class="property-type">string</span></dt><dd>Select the output to use</dd>
+        </dd>
+    </dl>
+
+    <h3>Outputs</h3>
+    <h5>Daylight value</h5>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">number | object</span></dt><dd>dayLight</dd>
+    </dl>
+    <h5>Current Light value</h5>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">number | object</span></dt><dd>light</dd>
+    </dl>
+    <h5>Current Light from the East value</h5>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">number | object</span></dt><dd>lightEast</dd>
+    </dl>
+    <h5>Current Light from the South value</h5>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">number | object</span></dt><dd>lightSouth</dd>
+    </dl>
+    <h5>Current Light from the West value</h5>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">number | object</span></dt><dd>lightWest</dd>
+    </dl>
+    <h5>Current Rain state</h5>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">boolean | object</span></dt><dd>raining</dd>
+    </dl>
+    <h5>Current Temprature</h5>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">number | object</span></dt><dd>temperature</dd>
+    </dl>
+    <h5>Current Twilght state</h5>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">boolean | object</span></dt><dd>twilight</dd>
+    </dl>
+    <h5>Current Wind value</h5>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">number | object</span></dt><dd>wind</dd>
+    </dl>
+
+</script>

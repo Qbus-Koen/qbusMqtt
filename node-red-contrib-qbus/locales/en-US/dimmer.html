@@ -1,0 +1,27 @@
+<script type="text/x-red" data-help-name="qbus-dimmer">
+    <p>This node can receives and send messages of the following types:</p>
+    <ul>
+        <li>Dimmer 1T</li>
+        <li>Dimmer 2T</li>
+      </ul>
+
+    <h3>Configuration</h3>
+    <dl class="message-properties">
+        <dt class="optional">Name <span class="property-type">string</span></dt><dd>Choose any name to identify your node</dd>
+        <dt>Controller <span class="property-type">object</span></dt><dd>Choose the controller to use</dd>
+        <dt>Output <span class="property-type">string</span></dt><dd>Select the output to use</dd>
+        </dd>
+    </dl>
+
+    <h3>Outputs</h3>
+    <h5>Output</h5>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">boolean | object</span></dt><dd>State of the output</dd>
+    </dl>
+
+    <h3>Inputs</h3>
+    <h5>Input</h5>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">number | object</span></dt><dd>State to send</dd>
+    </dl>
+</script>

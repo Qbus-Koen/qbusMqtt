@@ -1,0 +1,28 @@
+{
+  "name": "node-red-contrib-qbus",
+  "version": "1.0.1",
+  "description": "",
+  "dependencies": {
+    "mqtt": "^4.3.7"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Koen Schockaert",
+  "license": "ISC",
+  "node-red": {
+    "nodes": {
+      "qbus": "qbus.js",
+      "bistabiel": "bistabiel.js",
+      "server": "server.js",
+      "dimmer": "dimmer.js",
+      "thermostat": "thermo.js",
+      "weather": "weather.js"
+    }
+  },
+  "contextStorage": {
+    "default": {
+      "module": "localfilesystem"
+    }
+  }
+}

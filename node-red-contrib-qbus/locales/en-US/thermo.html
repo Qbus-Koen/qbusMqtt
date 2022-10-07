@@ -1,0 +1,42 @@
+<script type="text/x-red" data-help-name="qbus-thermostat">
+    <p>This node can receives and send messages of the thermostat type.</p>
+
+    <h3>Configuration</h3>
+    <dl class="message-properties">
+        <dt class="optional">Name <span class="property-type">string</span></dt><dd>Choose any name to identify your node</dd>
+        <dt>Controller <span class="property-type">object</span></dt><dd>Choose the controller to use</dd>
+        <dt>Output <span class="property-type">string</span></dt><dd>Select the output to use</dd>
+        </dd>
+    </dl>
+
+    <h3>Outputs</h3>
+    <h5>Current Mode</h5>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">string | object</span></dt><dd>currRegime (NACHT / COMFORT / ECONOMY / VORST / MANUEEL)</dd>
+    </dl>
+    <h5>Current Temperature</h5>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">number | object</span></dt><dd>currTemp</dd>
+    </dl>
+    <h5>Setpoint</h5>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">number | object</span></dt><dd>setTemp</dd>
+    </dl>
+
+    <h3>Inputs</h3>
+    <h5>Current Mode</h5>
+    <dl class="message-properties">
+        <dt>topic <span class="property-type">string | object</span></dt><dd>Type to send (currRegime)</dd>
+        <dt>payload <span class="property-type">string | object</span></dt><dd>Mode to send (NACHT / COMFORT / ECONOMY / VORST / MANUEEL)</dd>
+    </dl>
+    <h5>Current Temperature</h5>
+    <dl class="message-properties">
+        <dt>topic <span class="property-type">string | object</span></dt><dd>Type to send (currTemp)</dd>
+        <dt>payload <span class="property-type">number | object</span></dt><dd>Temp to send</dd>
+    </dl>
+    <h5>Setpoint</h5>
+    <dl class="message-properties">
+        <dt>topic <span class="property-type">string | object</span></dt><dd>Type to send (setTemp)</dd>
+        <dt>payload <span class="property-type">number | object</span></dt><dd>Temp to send</dd>
+    </dl>
+</script>

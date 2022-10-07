@@ -134,4 +134,15 @@ The only thing you've got to chage if you used the previous version is the Bridg
 Bridge qbus:bridge:CTDxxxxxx [ ip="<ip mosquitto>", sn="<ctd/sn>", login="<mqttuser>", passwd="<mqttpassw>", port=<mqtt port>] {
 }  
 ```
- 
+
+## node-RED
+You can find a Qbus node for node-RED under node-red-contrib-qbus. To use this node, copy the node to the node-RED node_modules folder:  
+
+```
+cp -r node-red-contrib-qbus/ .node-red/node_modules/
+```
+
+Then restart node-RED
+```
+sudo systemctl restart nodered.service
+```

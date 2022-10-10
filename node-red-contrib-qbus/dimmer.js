@@ -26,7 +26,7 @@ module.exports = function(RED) {
                     subscribe()
                     requestState()
                     node.on("input", function(msg) {
-                        var cmd = '{"id":"' + node.qid + '","type":"state","properties":{"value":' + msg.payload + '}}'
+                        var cmd = '{"id":"' + node.qid + '","type":"state","properties":{"' + msg.topic + '":' + msg.payload + '}}'
                         var topic = "cloudapp/QBUSMQTTGW/" + node.ctdQid + "/" + node.qid + "/setState"
                         node.serverConn.mqtt.publish(topic, cmd,
                                 {'qos':parseInt(node.serverConn.config.mqtt_qos||0)},
@@ -87,9 +87,12 @@ module.exports = function(RED) {
             var pl = JSON.parse(topic.payload)
             var  msg = {}
             if (node.qid === pl.id) {
-                msg.payload = pl.properties.value;
+                if (pl.properties.hasOwnProperty("value")){
+                    msg.topic = "value"
+                    msg.payload = pl.properties.value;
+                    node.status({fill:"green", shape:"ring", text:"Value: " + msg.payload})
+                }
                 node.send(msg);
-                node.status({fill:"green", shape:"ring", text:"State " + pl.properties.value})
             } 
         }
 }

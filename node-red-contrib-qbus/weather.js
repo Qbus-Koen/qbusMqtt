@@ -76,11 +76,44 @@ module.exports = function(RED) {
             var pl = JSON.parse(topic.payload)
             var  msg = {}
             if (node.qid === pl.id) {
-                msg.payload = pl.properties;
-                node.send(msg);
                 if (pl.properties.hasOwnProperty("temperature")){
-                    node.status({fill:"green", shape:"ring", text:"Current Temp " + pl.properties.temperature})
+                    msg.topic = "temperature"
+                    msg.payload = pl.properties.temperature;
+                    node.status({fill:"green", shape:"ring", text:"Current temp: " + msg.payload})
+                } else if (pl.properties.hasOwnProperty("dayLight")){
+                    msg.topic = "dayLight"
+                    msg.payload = pl.properties.dayLight;
+                    node.status({fill:"green", shape:"ring", text:"Daylight: " + msg.payload})
+                } else if (pl.properties.hasOwnProperty("light")){
+                    msg.topic = "light"
+                    msg.payload = pl.properties.light;
+                    node.status({fill:"green", shape:"ring", text:"Light: " + msg.payload})
+                } else if (pl.properties.hasOwnProperty("lightEast")){
+                    msg.topic = "lightEast"
+                    msg.payload = pl.properties.lightEast;
+                    node.status({fill:"green", shape:"ring", text:"Light East: " + msg.payload})
+                } else if (pl.properties.hasOwnProperty("lightSouth")){
+                    msg.topic = "lightSouth"
+                    msg.payload = pl.properties.lightSouth;
+                    node.status({fill:"green", shape:"ring", text:"Light South: " + msg.payload})
+                } else if (pl.properties.hasOwnProperty("lightWest")){
+                    msg.topic = "lightWest"
+                    msg.payload = pl.properties.lightWest;
+                    node.status({fill:"green", shape:"ring", text:"Light West: " + msg.payload})
+                } else if (pl.properties.hasOwnProperty("raining")){
+                    msg.topic = "raining"
+                    msg.payload = pl.properties.raining;
+                    node.status({fill:"green", shape:"ring", text:"Raining: " + msg.payload})
+                } else if (pl.properties.hasOwnProperty("twilight")){
+                    msg.topic = "twilight"
+                    msg.payload = pl.properties.twilight;
+                    node.status({fill:"green", shape:"ring", text:"Twilight: " + msg.payload})
+                } else if (pl.properties.hasOwnProperty("wind")){
+                    msg.topic = "wind"
+                    msg.payload = pl.properties.wind;
+                    node.status({fill:"green", shape:"ring", text:"Wind: " + msg.payload})
                 }
+                node.send(msg);
             }
         }
 }

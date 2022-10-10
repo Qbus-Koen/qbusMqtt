@@ -49,6 +49,17 @@ module.exports = function(RED) {
                             case 'thermo':
                                 outputs.push(new Outputs(functionBlocks[j].id, "thermostat", functionBlocks[j].name));
                                 break;
+                            case 'shutter':
+                                if (functionBlocks[j].properties.hasOwnProperty("state")){
+                                    // UP/DOWN Type
+                                    outputs.push(new Outputs(functionBlocks[j].id, "shutter", functionBlocks[j].name));
+                                } else if (functionBlocks[j].properties.hasOwnProperty("shutterPosition")){
+                                    // %type
+                                    outputs.push(new Outputs(functionBlocks[j].id, "shutter", functionBlocks[j].name));
+                                } else if (functionBlocks[j].properties.hasOwnProperty("slatPosition")){
+                                    // %type with slats
+                                    outputs.push(new Outputs(functionBlocks[j].id, "shutter", functionBlocks[j].name));
+                                }
                         }
                     }
                     

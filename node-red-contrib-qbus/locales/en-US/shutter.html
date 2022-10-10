@@ -1,0 +1,50 @@
+<script type="text/x-red" data-help-name="qbus-shutter">
+    <p>This node can receive and send messages of the following types:</p>
+    <ul>
+        <li>Shutter (Position)</li>
+        <li>Shutter (Slats)</li>
+        <li>Shuuter (1/2 T)</li>
+    </ul>
+
+    <h3>Configuration</h3>
+    <dl class="message-properties">
+        <dt class="optional">Name <span class="property-type">string</span></dt><dd>Choose any name to identify your node</dd>
+        <dt>Controller <span class="property-type">object</span></dt><dd>Choose the controller to use</dd>
+        <dt>Output <span class="property-type">string</span></dt><dd>Select the output to use</dd>
+        </dd>
+    </dl>
+
+    <h3>Outputs</h3>
+    <h5>Shutter State value</h5>
+    <dl class="message-properties">
+        <dt>topic <span class="property-type">string | object</span></dt><dd>State (state)</dd>
+        <dt>payload <span class="property-type">string | object</span></dt><dd>state (UP/DOWN/STOP)</dd>
+    </dl>
+    <h5>Shutter Position value</h5>
+    <dl class="message-properties">
+        <dt>topic <span class="property-type">string | object</span></dt><dd>Position (shutterPosition)</dd>
+        <dt>payload <span class="property-type">number | object</span></dt><dd>percent</dd>
+    </dl>
+    <h5>Shutter Slats value</h5>
+    <dl class="message-properties">
+        <dt>topic <span class="property-type">string | object</span></dt><dd>Position (slatPosition)</dd>
+        <dt>payload <span class="property-type">number | object</span></dt><dd>percent</dd>
+    </dl>
+
+    <h3>Inputs</h3>
+    <h5>Shutter State value</h5>
+    <dl class="message-properties">
+        <dt>topic <span class="property-type">string | object</span></dt><dd>State (state)</dd>
+        <dt>payload <span class="property-type">string | object</span></dt><dd>State to send (UP/DOWN/STOP)</dd>
+    </dl>
+    <h5>Shutter Position value</h5>
+    <dl class="message-properties">
+        <dt>topic <span class="property-type">string | object</span></dt><dd>Position (shutterPosition)</dd>
+        <dt>payload <span class="property-type">number | object</span></dt><dd>Shutter position to send (%)</dd>
+    </dl>
+    <h5>Shutter Slats value</h5>
+    <dl class="message-properties">
+        <dt>topic <span class="property-type">string | object</span></dt><dd>Position (slatPosition)</dd>
+        <dt>payload <span class="property-type">number | object</span></dt><dd>Slats position to send (%)</dd>
+    </dl>
+</script>

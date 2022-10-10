@@ -100,11 +100,21 @@ module.exports = function(RED) {
             var pl = JSON.parse(topic.payload)
             var  msg = {}
             if (node.qid === pl.id) {
-                msg.payload = pl.properties;
-                node.send(msg);
                 if (pl.properties.hasOwnProperty("currTemp")){
-                    node.status({fill:"green", shape:"ring", text:"Current Temp " + pl.properties.currTemp})
+                    msg.topic = "currTemp"
+                    msg.payload = pl.properties.currTemp;
+                    node.status({fill:"green", shape:"ring", text:"Current temp: " + msg.payload})
+                } else if (pl.properties.hasOwnProperty("currRegime")){
+                    msg.topic = "currRegime"
+                    msg.payload = pl.properties.currRegime;
+                    node.status({fill:"green", shape:"ring", text:"Current regime: " + msg.payload})
+                } else if (pl.properties.hasOwnProperty("setTemp")){
+                    msg.topic = "setTemp"
+                    msg.payload = pl.properties.setTemp;
+                    node.status({fill:"green", shape:"ring", text:"Setpoint: " + msg.payload})
                 }
+                
+                node.send(msg);
             }
         }
 }

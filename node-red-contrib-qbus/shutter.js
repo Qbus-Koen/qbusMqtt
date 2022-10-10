@@ -1,5 +1,5 @@
 module.exports = function(RED) {
-    class QbusBistabielNode {
+    class QbusShutterNode {
         constructor(n) {
             RED.nodes.createNode(this,n);
 
@@ -30,8 +30,21 @@ module.exports = function(RED) {
                         subscribe()
                         requestState()
                         node.on("input", function(msg) {
-                            var cmd = '{"id":"' + node.qid + '","type":"state","properties":{"' + msg.topic + '":' + msg.payload + '}}'
+                            var cmd = ""
+                            switch (msg.topic) {
+                                case "state":
+                                    cmd = '{"id":"' + node.qid + '","type":"state","properties":{"' + msg.topic + '":"' + msg.payload + '"}}'
+                                    break;
+                                case "shutterPosition":
+                                    cmd = '{"id":"' + node.qid + '","type":"state","properties":{"' + msg.topic + '":' + msg.payload + '}}'
+                                    break;
+                                case "slatPosition":
+                                    cmd = '{"id":"' + node.qid + '","type":"state","properties":{"' + msg.topic + '":' + msg.payload + '}}'
+                                    break;
+                            }
+    
                             var topic = "cloudapp/QBUSMQTTGW/" + node.ctdQid + "/" + node.qid + "/setState"
+    
                             node.serverConn.mqtt.publish(topic, cmd,
                                     {'qos':parseInt(node.serverConn.config.mqtt_qos||0)},
                                     function(err) {
@@ -94,14 +107,22 @@ module.exports = function(RED) {
             var pl = JSON.parse(topic.payload)
             var  msg = {}
             if (node.qid === pl.id) {
-                if (pl.properties.hasOwnProperty("value")){
-                    msg.topic = "value";
-                    msg.payload = pl.properties.value;
-                    node.status({fill:"green", shape:"ring", text:"Value: " + msg.payload});
+                if (pl.properties.hasOwnProperty("state")){
+                    msg.topic = "state"
+                    msg.payload = pl.properties.state;
+                    node.status({fill:"green", shape:"ring", text:"State: " + pl.properties.state})
+                } else if (pl.properties.hasOwnProperty("shutterPosition")){
+                    msg.topic = "shutterPosition"
+                    msg.payload = pl.properties.shutterPosition;
+                    node.status({fill:"green", shape:"ring", text:"Shutter position: " + pl.properties.shutterPosition})
+                } else if (pl.properties.hasOwnProperty("slatPosition")){
+                    msg.topic = "slatPosition"
+                    msg.payload = pl.properties.slatPosition;
+                    node.status({fill:"green", shape:"ring", text:"Slat position: " + pl.properties.slatPosition})
                 }
                 node.send(msg);
             }
         }
 }
-    RED.nodes.registerType("qbus-bistabiel",QbusBistabielNode);
+    RED.nodes.registerType("qbus-shutter",QbusShutterNode);
 }

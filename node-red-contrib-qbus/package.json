@@ -19,7 +19,8 @@
       "dimmer": "dimmer.js",
       "thermostat": "thermo.js",
       "weather": "weather.js",
-      "shutter": "shutter.js"
+      "shutter": "shutter.js",
+      "scene": "scene.js"
     }
   },
   "engines": {

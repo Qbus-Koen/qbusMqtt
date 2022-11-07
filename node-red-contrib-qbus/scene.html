@@ -1,0 +1,86 @@
+<script type="text/javascript">
+    RED.nodes.registerType('qbus-scene',{
+        category: 'qbus',
+        color: '#F3B567',
+        defaults: {
+            client: {
+               type: "qbus-client",
+                required: true
+            },
+            name: {value:""},
+            output: {value:""},
+            qid:  {value:""}
+        },
+        inputs:1,
+        icon: "font-awesome/fa-toggle-on",
+        paletteLabel: 'scene',
+        label: function() {
+            return this.name||"scene";
+        },
+        oneditprepare: function () {
+            
+
+            $("#node-input-client").on('change', function(event, type, value) {
+                // Clear dropdown
+                $('#node-input-output').empty();
+
+                // Set selected controller
+                var configCTD = $('#node-input-client option:selected').text().toString();
+
+                // Handele outputs if a controller is selected
+                $.getJSON("qbus-client/output", {"ctd":configCTD, "type":"scene"}, function(outputs) {
+                    // Add scene outputs to dropdown
+                    for (i = 0; i < outputs.length; i++) {
+                        $('#node-input-output')
+                            .append($('<option>', { value : outputs[i].id })
+                            .text(outputs[i].name)) 
+                    }
+
+                    // Read selected output and set dropdown text to sel outp
+                    let selo = $('#node-input-qid').val().toString();
+                    $('#node-input-output').val(selo);
+
+                    // On dropdown - select new scene
+                    $("#node-input-output").on('change', function(event, type, value) {
+                        // Set output var and name to selected output
+                        var outp = $('#node-input-output option:selected').text();
+                        $("#node-input-name").val(outp);
+                        this.name = outp;
+
+                        var lqid = $('#node-input-output option:selected').val();
+                        $("#node-input-qid").val(lqid);
+                        this.qid = lqid;
+                    });
+                }).fail(function(jqXHR, textStatus, errorThrown) { console.log('Failed to get Bistables list, please configure controller first.'); })
+                    
+                
+            });
+        },
+        oneditsave: function() {
+        },
+        oneditcancel: function() {
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="qbus-scene">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-empire"></i> <span data-i18n="qbus.label.name"></span></label>
+        <input type="text" id="node-input-name" data-i18n="[placeholder]qbus.placeholder.name">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-client" class="l-width"><i class="fa fa-globe"></i> <span data-i18n="qbus.label.ctd"></span></label>
+        <input type="text" id="node-input-client">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-output"><i class="fa fa-empire"></i> <span data-i18n="qbus.label.output"></span></label>
+        <select id="node-input-output">
+        </select>
+    </div>
+
+    <div class="form-row" style="display: none;">
+        <input type="text" id="node-input-qid">
+    </div>
+</script>

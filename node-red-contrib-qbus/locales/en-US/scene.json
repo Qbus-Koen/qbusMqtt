@@ -1,0 +1,12 @@
+{
+    "qbus": {
+        "label": {
+            "name": "Name",
+            "ctd": "CTD",
+            "output": "Output"
+        },
+        "placeholder": {
+			"name": "Name"
+        }
+    }
+}

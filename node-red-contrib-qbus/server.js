@@ -60,6 +60,10 @@ module.exports = function(RED) {
                                     // %type with slats
                                     outputs.push(new Outputs(functionBlocks[j].id, "shutter", functionBlocks[j].name));
                                 }
+                                break;
+                            case 'scene':
+                                outputs.push(new Outputs(functionBlocks[j].id, "scene", functionBlocks[j].name));
+                                break;
                         }
                     }
                     

@@ -1,5 +1,5 @@
+require('events').defaultMaxListeners = 1000;
 module.exports = function(RED) {
-
     function Ctds(sn, id) {
         this.sn = sn
         this.id = id

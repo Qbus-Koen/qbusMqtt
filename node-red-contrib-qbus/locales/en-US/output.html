@@ -1,0 +1,86 @@
+<script type="text/x-red" data-help-name="qbus-output">
+    <p>This node can receive and send messages to a Qbus controller:</p>
+
+    <h3>Configuration</h3>
+    <dl class="message-properties">
+        <dt class="optional">Name <span class="property-type">string</span></dt><dd>Choose any name to identify your node</dd>
+        <dt>Client <span class="property-type">object</span></dt><dd>Choose the mqtt server to use</dd>
+        <dt>CTD <span class="property-type">object</span></dt><dd>Choose the controller to use</dd>
+        <dt>Type <span class="property-type">object</span></dt><dd>Choose the type to control</dd>
+        <dt>Output <span class="property-type">string</span></dt><dd>Select the output to use</dd>
+        </dd>
+    </dl>
+
+    <h3>Node inputs</h3>
+
+    <h4>Bistabiel</h4>
+    <dl class="message-properties">
+        <dt>topic <span class="property-type">string | object</span></dt><dd>value</dd>
+        <dt>payload <span class="property-type">boolean | object</span></dt><dd>value (true / false)</dd>
+    </dl>
+
+    <h4>Dimmer</h4>
+    <dl class="message-properties">
+        <dt>topic <span class="property-type">string | object</span></dt><dd>value</dd>
+        <dt>payload <span class="property-type">number | object</span></dt><dd>value (xxx %)</dd>
+    </dl>
+
+    <h4>Thermostaat</h4>
+    <h5>Setpoint</h5>
+    <dl class="message-properties">
+        <dt>topic <span class="property-type">string | object</span></dt><dd>setTemp</dd>
+        <dt>payload <span class="property-type">number | object</span></dt><dd>temp (xx °C)</dd>
+    </dl>
+    <h5>Regime</h5>
+    <dl class="message-properties">
+        <dt>topic <span class="property-type">string | object</span></dt><dd>currRegime (value)</dd>
+        <dt>payload <span class="property-type">string | object</span></dt><dd>regime (MANUEEL / VORST /ECONOMY / COMFORT / NACHT)</dd>
+    </dl>
+    <h5>Current temp</h5>
+    <dl class="message-properties">
+        <dt>topic <span class="property-type">string | object</span></dt><dd>currTemp</dd>
+        <dt>payload <span class="property-type">number | object</span></dt><dd>temp (xx °C)</dd>
+    </dl>
+
+    <h4>Meters</h4>
+    <h5>None</h5>
+
+    <h4>Rolluiken</h4>
+    <h5>Shutter State</h5>
+    <dl class="message-properties">
+        <dt>topic <span class="property-type">string | object</span></dt><dd>state</dd>
+        <dt>payload <span class="property-type">string | object</span></dt><dd>state (UP/DOWN/STOP)</dd>
+    </dl>
+    <h5>Shutter Position</h5>
+    <dl class="message-properties">
+        <dt>topic <span class="property-type">string | object</span></dt><dd>shutterPosition</dd>
+        <dt>payload <span class="property-type">number | object</span></dt><dd>position (xx %)</dd>
+    </dl>
+    <h5>Shutter Slats</h5>
+    <dl class="message-properties">
+        <dt>topic <span class="property-type">string | object</span></dt><dd>slatPosition</dd>
+        <dt>payload <span class="property-type">number | object</span></dt><dd>position (xx %)</dd>
+    </dl>
+
+    <h4>Weerstation</h4>
+    <h5>None</h5>
+
+    <h4>Sferen</h4>
+    <dl class="message-properties">
+        <dt>topic <span class="property-type">string | object</span></dt><dd>action</dd>
+        <dt>payload <span class="property-type">string | object</span></dt><dd>activate</dd>
+    </dl>
+
+    <h3>Node outputs</h3>
+    <h5>General</h5>
+    <dl class="message-properties">
+        <dt>topic <span class="property-type">string | object</span></dt><dd>event / state</dd>
+        <dt>name <span class="property-type">string | object</span></dt><dd>Output name</dd>
+        <dt>outputId <span class="property-type">string | object</span></dt><dd>Output ID</dd>
+        <dt>ctdId <span class="property-type">string | object</span></dt><dd>CTD ID</dd>
+        <dt>ctdSn <span class="property-type">string | object</span></dt><dd>CTD SN</dd>
+        <dt>payload <span class="property-type">boolean | object</span></dt><dd>same as input node</dd>
+    </dl>
+
+    
+</script>

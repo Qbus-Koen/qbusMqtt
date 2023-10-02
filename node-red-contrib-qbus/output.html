@@ -1,0 +1,330 @@
+<script type="text/javascript">
+    
+    function editPrepare(node){
+        // Prepare multiselect for outputs
+        var itemSelectionEl = $('#node-input-outputsO');
+        itemSelectionEl.multiselect({
+                enableFiltering: true,
+                enableCaseInsensitiveFiltering: true,
+                maxHeight: 300,
+                disableIfEmpty: true,
+                nonSelectedText: 'Select item...',
+                disabledText: 'No items found...'
+        });
+
+        // Prepare output types
+        function setTypes() {
+            $('#node-input-types')
+                .append($('<option>', { value : 'onoff' })
+                .text("Bistabiel")
+            ) 
+            $('#node-input-types')
+                .append($('<option>', { value : 'analog' })
+                .text("Dimmer")
+            ) 
+            $('#node-input-types')
+                .append($('<option>', { value : 'thermo' })
+                .text("Thermostaat")
+            )
+            $('#node-input-types')
+                .append($('<option>', { value : 'gauge' })
+                .text("Meters")
+            )
+            $('#node-input-types')
+                .append($('<option>', { value : 'shutter' })
+                .text("Rolluiken")
+            )
+            $('#node-input-types')
+                .append($('<option>', { value : 'weatherstation' })
+                .text("Weerstation")
+            )
+            $('#node-input-types')
+                .append($('<option>', { value : 'scene' })
+                .text("Sferen")
+            )
+    
+            $('#node-input-types')
+                .append($('<option>', { value : 'all' })
+                .text("Alle uitgangen")
+            ) 
+        }
+        setTypes()
+        if (!node.typeO) {
+            node.typeO = 'all'
+        } else {
+            let t = node.typeO.toString()
+            $('#node-input-types').val(t)
+        }
+
+        // Request all outputs for selected controller  
+        // from global storage and filter by type
+        function requestOutputs(ctdi, oType){
+            var type = oType
+            var ctd = ctdi
+            var conn = false
+
+            $("#node-button-activate").hide();
+
+            $.getJSON("/qbus-client/connectable", {"ctd":ctd}, function(c) {
+                //console.log(c)
+                conn = c.connectable
+
+                if (conn == false){
+                    // If controller is nog activated for MQTT =>
+                    // Show activation button and remove hide outputs fropm dropdown from prev selection
+                    $("#node-button-activate").show();
+                    itemSelectionEl.children().remove();
+                    itemSelectionEl.multiselect('rebuild');
+                } else {
+                    // Controller ready to accept connection 
+                    // Clear output list
+                    itemSelectionEl.children().remove();
+                    // Request outputs
+                    $.getJSON("/qbus-client/outputs", {"ctd":ctd, "type": type}, function(outputs) {
+                        var items = outputs;
+
+                        // Sort received outputs
+                        items.sort(function (a, b) {
+                            if (a.name < b.name)
+                                return -1;
+                            else if (a.name > b.name)
+                                return 1;
+                            else
+                                return 0;
+                        });
+
+                        // Add outputs to dropdown for selected type
+                        for (i = 0; i < items.length; i++) {
+                            if (type == 'all') {
+                                itemSelectionEl
+                                    .append($('<option>', { value : items[i].id, type :  items[i].type})
+                                    .text(items[i].name)) 
+                            } else {
+                                if (items[i].type == type){
+                                    itemSelectionEl
+                                        .append($('<option>', { value : items[i].id, type :  items[i].type})
+                                        .text(items[i].name)) 
+                                } 
+                            }
+                        }
+
+                        // Select saved outputs
+                        if (node.selOutputs) {
+                            itemSelectionEl.val(node.selOutputs);
+                        }
+                        
+                        // Rebuild visible list
+                        itemSelectionEl.multiselect('rebuild');
+
+                        // Listen to list and add selected outputs to variable when changed
+                        $("#node-input-outputsO").on('change', function(event, type, value) {
+                            var sel = $('#node-input-outputsO option:selected');
+                            var selected = [];
+                            sel.each(function(){
+                                selected.push($(this).val());
+                            });
+                            node.selOutputs = selected;
+                        });
+
+                    
+                    }).fail(function(jqXHR, textStatus, errorThrown) { console.log('Failed to get Bistables list, please configure controller first.'); })
+                }
+            }).fail(function(jqXHR, textStatus, errorThrown) { console.log('Failed to get Controllers list, please connect to MQTT server first.'); }) 
+        }
+
+        // Request controllers
+        function requestControllers(){
+            $('#node-input-ctdSn').empty();
+            
+            $.getJSON("/qbus-client/ctds", function(ctd) {
+                // Add ctds to dropdown
+                for (i = 0; i < ctd.length; i++) {
+                    $('#node-input-ctdSn')
+                        .append($('<option>', { value : ctd[i].id })
+                        .text(ctd[i].sn)) 
+                }
+
+                // If a controller was stored in memory => set again 
+                // Else select first controller
+                // Then request outputs
+                if (node.selCtdUL) {
+                    let c = node.selCtdUL.toString()
+                    $('#node-input-ctdSn').val(c)
+                    var type = $('#node-input-types option:selected').val();
+                    var ctdul = $('#node-input-ctdSn').val();
+                    requestOutputs(ctdul, type)
+                } else {
+                    var type = $('#node-input-types option:selected').val();
+                    var ctdul = $('#node-input-ctdSn option:selected').val();
+                    requestOutputs(ctdul, type)
+                }
+            }).fail(function(jqXHR, textStatus, errorThrown) { console.log('Failed to get Controllers list, please connect to MQTT server first.'); }) 
+
+        }
+
+        /* ---------------------------------------------------------
+           -   Listen to changed objects and run above functions   -
+           --------------------------------------------------------- */ 
+        
+        $('#node-input-client').on('change', function(event, type, value) {
+            var client = $('#node-input-client option:selected').val()
+            if (client.toString() != "_ADD_"){
+                requestControllers();
+            } else {
+                $('#node-input-ctdSn').empty();
+            }
+        });
+
+        $('#node-input-ctdSn').on('change', function(event, type, value) {
+            //setTypes()
+            var type = $('#node-input-types option:selected').val();
+            var ctdul = $('#node-input-ctdSn option:selected').val();
+            var client = $('#node-input-client option:selected').val();
+            var sn = $('#node-input-ctdSn option:selected').text();
+            if (client.toString() != "_ADD_"){
+                node.selCtdSn =  sn;
+                requestOutputs(ctdul, type)
+            } 
+        });
+
+        $("#node-input-types").on('change', function(event, type, value) {
+            var type = $('#node-input-types option:selected').val();
+            var ctdul = $('#node-input-ctdSn option:selected').val();
+            node.typeO = type
+            if (ctdul){
+                requestOutputs(ctdul, type)
+            }
+        });
+
+        $("#node-button-activate").on('click', function() {
+            var ctdul = $('#node-input-ctdSn option:selected').val();
+            $.getJSON("/qbus-client/activate", {"ctd":ctdul}, function(connectable) {
+                console.log("Activating controller " + ctdul)
+            }).fail(function(jqXHR, textStatus, errorThrown) { console.log('Failed to get Controllers list, please connect to MQTT server first.'); }) 
+
+        });
+    }
+
+</script>
+
+<script type="text/javascript">
+    $.getScript('static/js/bootstrap-multiselect.js');
+    RED.nodes.registerType('qbus-output',{
+        category: 'qbus',
+        color: '#F3B567',
+        defaults: {
+            name: {value: ""},                          // Name for node
+            client: {value:"", type:"mqtt-client"},     // MQTT client node
+            ctdSn: {value: null, required: true},       // sn ID CTD 
+            typeO: {value: ""},                         // Output type
+            outputsO: {value:"", required: true},       // UL ID OUTPUT NAME IN DROPDOWN
+            selCtdUL: {value: ""},                      // UL ID CTD (hidden value to store CTD-UL-id)
+            selCtdSn: {value: ""},                      // CTD SN (hidden value to store CTD-SN)
+            selOutputs: {value: ""},                    // UL ID OUTPUT (hidden value to store OUTPUT-UL-id)
+        },
+        
+        inputs:1,
+        outputs:1,
+        icon: "font-awesome/fa-toggle-on",
+        paletteLabel: 'output',
+        label: function() {
+            return this.name||"output";
+        },
+        oneditprepare: function () {
+            editPrepare(this)
+            },
+        oneditsave: function() {
+            var ctd2save = $('#node-input-ctdSn option:selected').val();
+            var ctdSn2save = $('#node-input-ctdSn option:selected').val();
+            var type2save = $('#node-input-types option:selected').val();
+            var ctdSn2save = $('#node-input-ctdSn option:selected').text();
+            debugger
+            if (ctd2save){
+                this.selCtdUL = ctd2save.toString()
+                this.selCtdSn = ctdSn2save.toString()
+            }
+            if (type2save){
+                this.typeO = type2save.toString()
+            }
+        },
+        oneditcancel: function() {
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="qbus-output">
+    <link rel="stylesheet" href="static/css/bootstrap-multiselect.css" type="text/css" />
+    <style type="text/css">
+        .btn-group {
+            width: 70%;
+        }
+        .multiselect {
+            width: 100%;
+        }
+        .form-row input.multiselect-search {
+            width: 100%;
+        }
+        .multiselect-clear-filter {
+            display: none;
+        }
+        .dropdown-menu {
+            width: 100% !important;
+        }
+        .multiselect-container input[type="checkbox"] {
+            margin-left: 0;
+            margin-right: 0;
+        }
+
+        .multiselect-container > li !important {
+            width: 90%;
+            height: 100%;
+        }
+
+        .multiselect-container > li > a > label.checkbox !important {
+            margin: 5px;
+            width: 90%;
+            height: 100%;
+            cursor: pointer;
+            font-weight: 400;
+            padding: 3px 20px 3px 40px
+        }   
+
+        .form-inline .multiselect-container li a label.checkbox input[type=checkbox], .form-inline .multiselect-container li a label.radio input[type=radio] !important{
+            margin-left: 0px;
+            margin-right: 0
+        }
+
+        .multiselect-container > li.disabled { display:none;}
+    </style>
+
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-empire"></i> <span data-i18n="qbus.label.name"></span></label>
+        <input type="text" id="node-input-name" data-i18n="[placeholder]qbus.placeholder.name">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-client"><i class="fa fa-globe"></i> <span data-i18n="qbus.label.client"></span></label>
+        <select id="node-input-client" data-i18n="[placeholder]qbus.placeholder.client">
+        </select>
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-ctdSn"><i class="fa fa-tag"></i> <span data-i18n="qbus.label.ctd"></span></label>
+        <select id="node-input-ctdSn" data-i18n="[placeholder]qbus.placeholder.ctd">
+        </select>
+        <button type="button" class="red-ui-button" id="node-button-activate">Activate controller</button>
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-types"><i class="fa fa-empire"></i> <span data-i18n="qbus.label.type"></span></label>
+        <select id="node-input-types" data-i18n="[placeholder]qbus.placeholder.type">
+        </select>
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-outputsO"><i class="fa fa-empire"></i> <span data-i18n="qbus.label.output"></span></label>
+        <select class='select' multiple="multiple" id="node-input-outputsO" data-i18n="[placeholder]qbus.placeholder.output">
+        </select>
+    </div>
+
+</script>

@@ -1,0 +1,84 @@
+<script type="text/javascript">
+    RED.nodes.registerType('mqtt-client',{
+        category: 'config',
+        defaults: {
+            name: {
+                value: null,
+                required: false
+            },
+            host: {
+                value: "",
+                required: true
+            },
+            mqtt_port: {
+                value: 1883,
+                required: false,
+                validate:RED.validators.number()
+            },
+            mqtt_username: {
+                value: "",
+                required: false
+            },
+            mqtt_password: {
+                value: "",
+                required: false
+            },
+            mqtt_qos: {
+                value: 0,
+                required: false,
+                validate:RED.validators.number()
+            },
+            tls: {type:"tls-config",required: false},
+            usetls: {value: false},
+            
+        },
+        paletteLabel: 'Mqtt client',
+        label: function() {
+            return this.name || "MQTT client";
+        },
+        oneditprepare: function() {
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="mqtt-client">
+
+    <div class="form-row">
+        <label for="node-config-input-name" class="l-width"><i class="fa fa-bookmark"></i> <span data-i18n="label.name"></span></label>
+        <input type="text" id="node-config-input-name">
+    </div>
+
+    <div class="form-row">
+        <label for="node-config-input-host" class="l-width"><i class="fa fa-location-arrow"></i> <span data-i18n="label.host"></span></label>
+        <input type="text" id="node-config-input-host">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-mqtt_port" class="l-width"><i class="fa fa-asterisk"></i> <span data-i18n="label.mqtt_port"></span></label>
+        <input type="text" id="node-config-input-mqtt_port" placeholder="1883">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-mqtt_username" class="l-width"><i class="fa fa-user"></i> <span data-i18n="label.mqtt_username"></span></label>
+        <input type="text" id="node-config-input-mqtt_username" autocomplete="new-password">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-mqtt_password" class="l-width"><i class="fa fa-lock"></i> <span data-i18n="label.mqtt_password"></span></label>
+        <input type="password" id="node-config-input-mqtt_password" autocomplete="new-password">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-mqtt_qos" class="l-width"><i class="fa fa-empire"></i> <span data-i18n="node-red:mqtt.label.qos">QoS</span></label>
+        <select id="node-config-input-mqtt_qos" style="width:125px !important">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+        </select>
+    </div>
+    <div class="form-row">
+        <input type="checkbox" id="node-config-input-usetls" style="display: inline-block; width: auto; vertical-align: top;">
+        <label for="node-config-input-usetls" style="width: auto" data-i18n="label.use-tls"></label>
+        <div id="node-config-row-tls" >
+            <label style="width: auto; margin-left: 20px; margin-right: 10px;" for="node-config-input-tls"><span data-i18n="label.tls-config"></span></label><input style="width: 300px;" type="text" id="node-config-input-tls">
+        </div>
+    </div>
+    <div class="form-tips" data-i18n="[html]tip.deploy"></div>
+
+</script>

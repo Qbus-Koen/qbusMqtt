@@ -1,0 +1,35 @@
+{
+    "label": {
+        "base_topic": "Base topic",
+        "name": "Name",
+        "ctd": "CTD",
+        "host": "MQTT Host",
+        "mqtt_port": "MQTT Port",
+        "mqtt_username": "MQTT Username",
+        "mqtt_password": "MQTT Password",
+        "use-tls": "Use TLS",
+        "tls-config":"TLS configuration"
+    },
+    "placeholder": {
+        "name": "Name"
+    },
+    "status": {
+        "no_server": "no server",
+        "no_device": "no device",
+        "no_connection": "no connection",
+        "no_value": "no value",
+        "received": "ok"
+    },
+    "tip": {
+        "deploy": "<b>Important:</b> deploy server node to get controller list"
+    },
+    "editor": {
+        "groups": "Groups",
+        "devices": "Devices",
+        "selected": "selected",
+        "nothing": "Nothing",
+        "select_device": "Select device",
+        "msg_topic": "msg.topic",
+        "complete_payload": "Complete payload"
+    }
+}
